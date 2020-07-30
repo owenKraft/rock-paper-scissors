@@ -17,6 +17,7 @@
         const computerSelection = computerPlay();
 
         function playRound(playerSelection, computerSelection){
+            // calc the difference in array position using options array (ex. scissors = options[2], rock = options[0], 0-2 = -2, therefore -2 results in win for whoever chose rock)
             let calcDifInScore = options.indexOf(playerSelection) - options.indexOf(computerSelection);
             return (calcDifInScore == 0) ? "draw! you both chose " + playerSelection :
                 (calcDifInScore == 1 || calcDifInScore == -2) ? ("you win! " + playerSelection + " beats " + computerSelection) : 
