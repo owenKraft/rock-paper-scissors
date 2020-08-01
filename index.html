@@ -6,27 +6,78 @@
     <title>Document</title>
 </head>
 <body>
+    <div class="container">
+        <button id="rock">rock</button>
+        <button id="paper">paper</button>
+        <button id="scissors">scissors</button>
+
+        <p id="playerScore">Your score: 0</p>
+        <p id="computerScore">Computer score: 0</p>
+    </div>
+
+
     <script>
-        let options = ["rock","paper","scissors"];
+        let playerScore = 0;
+        let computerScore = 0;
+
+        const btn = document.querySelectorAll("button");
+        btn.forEach(function(elem){
+            elem.addEventListener("click", function(){
+                let playerSelection = elem.textContent.toLowerCase();
+                let computerSelection = computerPlay();
+                
+                const container = document.querySelector(".container");
+
+                const choice = document.createElement("div");
+                container.appendChild(choice);
+
+                const p1 = document.createElement("p");
+                p1.textContent = playRound(playerSelection, computerSelection)
+
+                choice.appendChild(p1);
+
+                updateScores(playerScore, computerScore);
+            });
+        });
+        
+        const options = ["rock","paper","scissors"];
 
         function computerPlay(){
             return options[Number(Math.floor(Math.random()*3))];
         }
 
-        const playerSelection = prompt("rock, paper, scissors?").toLowerCase();
-        const computerSelection = computerPlay();
-
         function playRound(playerSelection, computerSelection){
             // calc the difference in array position using options array (ex. scissors = options[2], rock = options[0], 0-2 = -2, therefore -2 results in win for whoever chose rock)
             let calcDifInScore = options.indexOf(playerSelection) - options.indexOf(computerSelection);
             return (calcDifInScore == 0) ? "draw! you both chose " + playerSelection :
-                (calcDifInScore == 1 || calcDifInScore == -2) ? ("you win! " + playerSelection + " beats " + computerSelection) : 
-                ("you lose! " + computerSelection + " beats " + playerSelection)
+                (calcDifInScore == 1 || calcDifInScore == -2) ? playerWins(playerSelection, computerSelection) : 
+                computerWins(playerSelection, computerSelection);
         }
 
-        console.log("you chose " + playerSelection)
-        console.log("computer chose " + computerSelection)
-        console.log(playRound(playerSelection,computerSelection))
+        function playerWins(playerSelection, computerSelection){
+            playerScore += 1;
+            return ("you win! " + playerSelection + " (your choice) beats " + computerSelection + " (computer's choice)");
+        }
+
+        function computerWins(playerSelection, computerSelection){
+            computerScore += 1;
+            return ("you lose! " + computerSelection + " (computer's choice) beats " + playerSelection+ " (your choice)");
+        }
+
+        function updateScores(playerScore, computerScore){
+            const updatePlayerScore = document.querySelector("#playerScore");
+            updatePlayerScore.textContent = "Your score: " + playerScore;
+
+            const updateCompScore = document.querySelector("#computerScore");
+            updateCompScore.textContent = "Computer score: " + computerScore;
+
+            if(playerScore === 5){
+                alert("You win!")
+            } else if(computerScore === 5){
+                alert("Computer wins!")
+            }
+        }
+
     </script>
 </body>
 </html>
